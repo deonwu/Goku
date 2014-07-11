@@ -1,0 +1,83 @@
+**********************移动基站视频图像监控系统-表结构*************************
+  主要系统表结构说明，如果需要清理过期数据: 
+  alarm_record(告警记录)
+  goku_system_log(系统日志)
+
+表1: alarm_record -- 告警记录
+=================|===============|====================================
+| 字段            | 类型           | 说明                          |
++----------------+---------------+-------------------------------+
+| uuid           | varchar(32)   | 告警编码,(主键)                 |
+| baseStation    | varchar(10)   | 告警基站编码                    |
+| channelId      | varchar(10)   | 通道ID                        |
+| alarmCode      | varchar(32)   | 告警编码                       |
+| alarmLevel     | varchar(10)   | 告警级别                       |
+| alarmCategory  | varchar(10)   | 告警分类                       |
+| alarmStatus    | varchar(10)   | 未使用                         |
+| user           | varchar(20)   | 未使用                         |
+| combinedUuid   | varchar(32)   | 图片告警时使用                  |
+| dataSize       | int(12)       | 未使用                        |
+| videoPath      | varchar(1024) | 告警相对路径                   |
+| startTime      | datetime      | 告警开始时间                   |
+| endTime        | datetime      | 告警结束时间                   |
+| lastUpdateTime | datetime      | 告警最后修改时间                |
+| comfirmTime    | datetime      | 告警确认时间                   |
++----------------+---------------+------+-----+---------+-------+
+
+表2: base_station -- 基站信息
+=================|===============|====================================
+| 字段            | 类型           | 说明                          |
++------------------+--------------+------------------------------+
+| uuid             | varchar(10)  | 基站编码,(主键)                 |
+| name             | varchar(50)  | 基站名称                       |
+| connectionStatus | varchar(10)  | 基站连接状态                    |
+| groupName        | varchar(50)  | 基站分组名称                    |
+| routeServer      | varchar(50)  | 基站转发服务器地址               |
+| locationId       | varchar(50)  | 基站IP和端口                   |
+| alarmStatus      | varchar(50)  | 未使用                        |
+| channels         | varchar(150) | 基站通道数量                   |
+| devType          | int(11)      | 基站类型 1-视频, 2-图片         |
+| lastActive       | datetime     | 最后活动时间                   |
+| lastUpdate       | datetime     | 最后修改时间                   |
+| lastDownVideo    | datetime     | 视频下载时间                   |
+| createDate       | datetime     | 基站创建时间                   |
+| locationUUID     | varchar(32)  | 基站位置ID                    |
+| btsCategory      | varchar(20)  | 端局类型编码                   |
+| supportAlarm     | varchar(255) | 基站支持的告警类型列表           |
++------------------+--------------+------+-----+---------+-------+
+
+表3: goku_system_log -- 系统日志
+===============|===============|====================================
+| 字段          | 类型           | 说明                          |
++------------------+-----------+------------------------------+
+| uuid         | varchar(32)   | 主键                          |
+| actionOwner  | varchar(50)   |                              |
+| actionObject | varchar(50)   |                              |
+| actionType   | varchar(50)   |                              |
+| description  | varchar(1024) |                              |
+| createDate   | datetime      |                              |
++--------------+---------------+------+-----+---------+-------+
+
+表4: user_account -- 用户帐号
+=============|=============|====================================
+| 字段        | 类型        | 说明                          |
++------------------+--------------------------------------+
+| name       | varchar(20) | 用户名 (主键)                  |
+| password   | varchar(50) |                              |
+| display    | varchar(50) | 未使用                        |
+| lastActive | datetime    |                              |
+| status     | varchar(10) |                              |
++------------+-------------+------+-----+---------+-------+
+
+表5: alarm_code_list -- 告警编码列表
+================|===============|====================================
+| 字段           | 类型           | 说明                              |
++---------------+--------------+------------------------------------+
+| alarmCode     | varchar(32) | 告警编码，                            |
+| alarmName     | varchar(50) | 告警名称，                            |
+| alarmLevel    | varchar(10) | 告警级别，                            |
+| alarmCategory | varchar(4)  |                                     |
+| alarmStatus   | varchar(4)  |                                     |
+| reActiveTime  | int(11)     | 告警活动最短间隔时间，单位（秒）          |
+| alarmDesc     | longtext    |                                     |
++---------------+-------------+-------------------------------------＋

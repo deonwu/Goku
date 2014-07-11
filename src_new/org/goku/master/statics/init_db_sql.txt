@@ -1,0 +1,55 @@
+BEGIN;
+CREATE TABLE `base_station` (
+    `uuid` varchar(10) NOT NULL PRIMARY KEY,
+    `connectionStatus` varchar(10) NOT NULL,
+    `groupName` varchar(50) NOT NULL,
+    `routeServer` varchar(50) NOT NULL,
+    `locationId` varchar(50) NOT NULL,
+    `alarmStatus` varchar(50) NOT NULL,
+    `devType` integer NOT NULL,
+    `lastActive` datetime NULL,
+    `lastUpdate` datetime NOT NULL,
+    `createDate` datetime NOT NULL
+)
+;
+CREATE TABLE `user_account` (
+    `name` varchar(20) NOT NULL PRIMARY KEY,
+    `password` varchar(50) NOT NULL,
+    `display` varchar(50) NOT NULL,
+    `lastActive` datetime NULL,
+    `status` varchar(10) NOT NULL
+)
+;
+CREATE TABLE `user_group` (
+    `name` varchar(20) NOT NULL PRIMARY KEY,
+    `isAdmin` integer NOT NULL
+)
+;
+CREATE TABLE `relation_user_group` (
+    `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `user_id` varchar(20) NOT NULL,
+    `user_group_id` varchar(20) NOT NULL,
+    UNIQUE (`user_id`, `user_group_id`)
+)
+;
+ALTER TABLE `relation_user_group` ADD CONSTRAINT user_group_id_refs_name_1ebc1c8d FOREIGN KEY (`user_group_id`) REFERENCES `user_group` (`name`);
+ALTER TABLE `relation_user_group` ADD CONSTRAINT user_id_refs_name_43f99d63 FOREIGN KEY (`user_id`) REFERENCES `user_account` (`name`);
+CREATE TABLE `relation_station_group` (
+    `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `base_station_id` varchar(10) NOT NULL,
+    `user_group_id` varchar(20) NOT NULL,
+    UNIQUE (`base_station_id`, `user_group_id`)
+)
+;
+ALTER TABLE `relation_station_group` ADD CONSTRAINT user_group_id_refs_name_624fc075 FOREIGN KEY (`user_group_id`) REFERENCES `user_group` (`name`);
+ALTER TABLE `relation_station_group` ADD CONSTRAINT base_station_id_refs_uuid_454b54b2 FOREIGN KEY (`base_station_id`) REFERENCES `base_station` (`uuid`);
+CREATE TABLE `alarm_record` (
+    `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `base_station_id` varchar(10) NOT NULL,
+    `startTime` varchar(50) NOT NULL,
+    `alarmType` varchar(10) NOT NULL,
+    `videoPath` varchar(1024) NOT NULL
+)
+;
+ALTER TABLE `alarm_record` ADD CONSTRAINT base_station_id_refs_uuid_27b56dbc FOREIGN KEY (`base_station_id`) REFERENCES `base_station` (`uuid`);
+COMMIT;

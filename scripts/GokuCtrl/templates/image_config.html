@@ -1,0 +1,291 @@
+{% extends "admin/base_site.html" %}
+
+
+{% block title %}图片设备参数配置{% endblock title %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% load adminmedia %}{% admin_media_prefix %}css/changelists.css" /> 
+<script src="{% load adminmedia %}{% admin_media_prefix %}js/jquery-1.2.6.min.js"></script> 
+<style>
+#month_report{
+	width:90%;
+}
+
+#month_report td.row_no{
+	width:40px;
+}
+
+</style>
+<div style="margin-bottom:4px;">
+	<span style="font-size:24px;">图片设备参数配置...</span>&nbsp;&nbsp;
+	<div><b>设备编号：</b>{{bs.uuid}}</div>
+	<div><b>设备名称：</b>{{bs.name}}</div>
+	<div><b>连接地址：</b>{{bs.locationId}}</div>
+	<div><b>服务器地址：</b>{{bs.routeServer}}</div>	
+</div><br/>
+<script language='javascript'>
+var image_server = 'http://{{bs.routeServer}}';
+var uuid = '{{bs.uuid}}';
+$(document).ready(function(){
+	$('#read_param').click(load_param);
+	$('#btn_load_date').click(load_date);	
+	$('#btn_save_date').click(save_date);
+	$('#btn_reset_param').click(function(e){
+		save_param('7');		
+	});
+	$('#btn_restart').click(restart);
+	$('#btn_save_mode').click(function(e){
+		save_param('1,' + $('#mode_ch1').val() + "," + $('#mode_ch2').val());
+	});
+
+	$('#btn_save_mode2').click(function(e){
+		save_param('16,' + $('#mode_ch3').val() + "," + $('#mode_ch4').val());
+	});
+	
+	$('#btn_save_color').click(function(e){
+		save_param('2,' + $('#color_x').val() + "," + $('#color_y').val() + "," + $('#color_z').val() + "," + $('#color_a').val());
+	});
+
+	$('#btn_mg_ch').click(function(e){
+		save_param('3,' + $('#mg_ch').val());
+	});	
+	
+	$('#btn_zip_rate').click(function(e){
+		save_param('5,' + $('#zip_rate').val());
+	});	
+	
+	
+	$('#btn_fbl').click(function(e){
+		save_param('9,' + $('#fbl').val());
+	});		
+	
+	$('#btn_mjld').click(function(e){
+		save_param('11,' + $('#mjld').val());
+	});	
+	
+	$('#btn_load_ver').click(load_dev_ver);
+	
+	//img_restart
+	
+	
+	load_param();
+});
+function load_param(){
+	//alert(image_server);
+	$.get("/", {'q': 'img_read_param',
+				 'uuid': uuid,
+				},
+				function(data){
+					//alert(data);
+					if(data['status'] == 'image'){
+						alert("设备正在传图片，不能读取参数。");
+					}else if(data['status'] == 'timeout'){
+						alert("参数读取失败，请稍后再重试。");
+					}else if(data['status'] == 'err'){
+						alert("参数读取出错，请与开发人员联系。");
+					}else if(data['status'] == 'ok'){
+						$('#mode_ch1').val(data['mode_ch1']);
+						$('#mode_ch2').val(data['mode_ch2']);
+						$('#mode_ch3').val(data['mode_ch3']);
+						$('#mode_ch4').val(data['mode_ch4']);
+						
+						$('#color_x').val(data['color_x']);
+						$('#color_y').val(data['color_y']);
+						$('#color_z').val(data['color_z']);
+						$('#color_a').val(data['color_a']);
+
+						$('#mg_ch').val(data['mg_ch']);
+						$('#zip_rate').val(data['zip_rate']);
+						
+						$('#fbl').val(data['fbl']);
+						$('#mjld').val(data['mjld']);
+						
+						alert("参数读取成功。");
+					}
+				},
+		   'json'
+		  );
+	//alert('post ok');
+}
+
+function load_date(){
+	$.post("/", {'q': 'img_get_date',
+		 'uuid': uuid,
+		},
+		function(data){
+			if(data['status'] == 'image'){
+				alert("设备正在传图片，不能读取参数。");
+			}else if(data['status'] == 'timeout'){
+				alert("参数读取超时，请稍后再重试。");
+			}else if(data['status'] == 'err'){
+				alert("参数读取出错，请与开发人员联系。");
+			}else if(data['status'] == 'ok'){				
+				$('#dateTime').val(data['date']);
+				alert("时间读取成功。");
+			}
+		},
+  'json'
+ );
+}
+	
+function save_date(date){
+		$.post("/", {'q': 'img_set_date',
+			 'uuid': uuid,
+			 'date': $('#dateTime').val(),
+			},
+			function(data){
+				if(data['status'] == 'image'){
+					alert("设备正在传图片，不能操作设备。");
+				}else if(data['status'] == 'timeout'){
+					alert("保存时间超时，请稍后再重试。");
+				}else if(data['status'] == 'err'){
+					alert("保存时间出错，请与开发人员联系。");
+				}else if(data['status'] == 'ok'){				
+					$('#dateTime').val(data['date']);
+					alert("时间保存成功。");
+				}
+			},
+	  'json'
+);		
+}
+
+function load_dev_ver(date){
+	$.post("/", {'q': 'img_load_version',
+		 'uuid': uuid,
+		},
+		function(data){
+			if(data['status'] == 'image'){
+				alert("设备正在传图片，不能操作设备。");
+			}else if(data['status'] == 'timeout'){
+				alert("版本读取超时，请稍后再重试。");
+			}else if(data['status'] == 'err'){
+				alert("版本读取出错，请与开发人员联系。");
+			}else if(data['status'] == 'ok'){				
+				$('#dev_ver').val(data['version']);
+				alert("设备版本读取成功。");
+			}
+		},
+  'json'
+);		
+}
+
+function restart(date){
+	$.post("/", {'q': 'img_restart',
+		 'uuid': uuid,
+		},
+		function(data){
+			if(data['status'] == 'timeout'){
+				alert("设备重启超时，请稍后再重试。");
+			}else if(data['status'] == 'err'){
+				alert("设备重启出错，请与开发人员联系。");
+			}else if(data['status'] == 'ok'){				
+				$('#dateTime').val(data['date']);
+				alert("设备重启成功。");
+			}
+		},
+  'json'
+);		
+}
+
+function save_param(param){
+	$.post("/", {'q': 'img_save_param',
+		 'uuid': uuid,
+		 'param': param
+		},
+		function(data){
+			if(data['status'] == 'image'){
+				alert("设备正在传图片，不能操作设备。");
+			}else if(data['status'] == 'timeout'){
+				alert("保存参数超时，请稍后再重试。");
+			}else if(data['status'] == 'err'){
+				alert("保存参数出错，请与开发人员联系。");
+			}else if(data['status'] == 'ok'){				
+				$('#dateTime').val(data['date']);
+				alert("参数保存成功。");
+			}
+		},
+  'json'
+);		
+}
+
+</script>
+
+<div>
+	<h3>设备操作</h3>
+	<input type='submit' id='read_param' name='read_param' value='读取设备参数' />&nbsp;&nbsp;		
+	<input type='submit' id='btn_restart' name='submit' value='系统重启' />&nbsp;&nbsp;	
+	<input type='submit' id='btn_reset_param' name='submit' value='视频通道恢复默认设置' />&nbsp;&nbsp;				
+	<br/> 
+</div>
+
+<div>
+	<h3>软件版本</h3>
+	<span>版本:<input size='10' readonly='readonly' type='text' id='dev_ver' name='dev_ver' value='0' /></span>
+	<input type='submit' id='btn_load_ver' name='submit' value='读取设备版本' />&nbsp;&nbsp;	
+</div>
+
+<div>
+	<h3>1. 视频通道模式</h3>
+	<span>通道一:<input size='4' type='text' id='mode_ch1' name='mode_ch1' value='0' /></span>
+	<span>通道二:<input size='4' type='text' id='mode_ch2' name='mode_ch2' value='0' /></span>
+	<input type='submit' name='submit' id='btn_save_mode' value='保存到设备' />&nbsp;&nbsp; 
+	
+	<br/>
+	<span>通道三:<input size='4' type='text' id='mode_ch3' name='mode_ch3' value='0' /></span>
+	<span>通道四:<input size='4' type='text' id='mode_ch4' name='mode_ch4' value='0' /></span>
+	<input type='submit' name='submit' id='btn_save_mode2' value='保存到设备' />&nbsp;&nbsp;
+		
+	<br/> 
+	<div>0x00-关闭模式,   0x01-图像侦测模式, 0x02-红外模式,  0x03-红外和图像侦测双检模式</div>
+</div>
+
+<div>
+	<h3>2. 视频通道亮度、对比度、饱和度、色调设置</h3>
+	<span>亮度(x):<input size='4' type='text' id='color_x' name='color_x' value='0' /></span>
+	<span>对比度(y):<input size='4' type='text' id='color_y' name='color_y' value='0' /></span>
+	<span>饱和度(z):<input size='4' type='text' id='color_z' name='color_z' value='0' /></span>
+	<span>色调(a):<input size='4' type='text' id='color_a' name='color_a' value='0' /></span>
+	<input type='submit' id='btn_save_color' name='submit' value='保存到设备' />&nbsp;&nbsp; 
+	<br/> 
+	<div>视频通道参数范围：0<= X、Y、Z <=255，0<=A<128</div>
+</div>
+
+<div>
+	<h3>3. 视频通道敏感度设置</h3>
+	<span>敏感度:<input size='4' type='text' id='mg_ch' name='mg_ch' value='50' /></span>
+	<input type='submit' name='submit' id='btn_mg_ch' value='保存到设备' />&nbsp;&nbsp; 
+	<br/> 
+	<div>默认值为50</div>
+</div>
+
+<div>
+	<h3>4. 视频通道图像压缩比设置</h3>
+	<span>压缩比:<input size='4' type='text' id='zip_rate' name='zip_rate' value='100' /></span>
+	<input type='submit' name='submit' id='btn_zip_rate' value='保存到设备' />&nbsp;&nbsp; 
+	<br/> 
+	<div>默认值为100</div>
+</div>
+
+<div>
+	<h3>5. 设置设备时钟</h3>
+	<span>时间:<input size='16' type='text' id='dateTime' name='dateTime' value='2011-05-11 01:01' /></span>
+	<input type='submit' id='btn_save_date' name='submit' value='保存到设备' />&nbsp;&nbsp; 
+	<input type='submit' id='btn_load_date' name='submit' value='读取设备时间' />&nbsp;&nbsp;	
+	<br/> 
+</div>
+
+<div>
+	<h3>6. 分辨率设置</h3>
+	<span>分辨率:<input size='16' type='text' id='fbl' name='fbl' value='0' /></span>
+	<input type='submit' name='submit' id='btn_fbl' value='保存到设备' />&nbsp;&nbsp; 
+	<div>X＝0（704x576），1（352x288）</div>	
+	<br/> 
+</div>
+<div>
+	<h3>7. 门禁联动开关设置</h3>
+	<span>是否联动:<input size='16' type='text' id='mjld' name='mjld' value='0' /></span>
+	<input type='submit' name='submit' id='btn_mjld' value='保存到设备' />&nbsp;&nbsp; 
+	<div>如果为1表示开“门禁联动”，如果为0表示关“门禁联动”</div>	
+	<br/> 
+</div>
+
+{% endblock content %}

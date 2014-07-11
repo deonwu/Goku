@@ -1,0 +1,32 @@
+<html>
+	<body>
+		<h1>手动告警：</h1>
+		<form action="?q=mock_alarm" method="POST">
+		<input type="hidden" name="q" value="mock_alarm" />
+		基站编号：<input type="text" name="uuid" value="1001" /><br/>
+		通道号：<input type="text" name="ch" value="1" /><br/>
+		告警类型：<select name="code">
+					<!-- <option value="001">01外部</option> -->
+					<option value="1002">1002视频丢失</option>
+					<option value="1003">1003动态检测</option>
+					<option value="1004">1004硬盘坏</option>
+				</select>
+				<br/>
+				<input type="submit" name="submit" value="submit" />
+				<br/>
+		</form>
+		
+		<h1>视频模拟：</h1>
+		<p>用一个告警录像，或视频文件来模拟实时监控录像，告警UUID／视频文件只填一个就行。
+		视频文件需要填绝对路径</p>
+		<form action="?q=mock_video" method="POST">
+		<input type="hidden" name="q" value="mock_video" />
+		基站编号：<input type="text" name="uuid" value="1001" /><br/>
+		通道号：<input type="text" name="ch" value="1" /><br/>
+		告警UUID：<input type="text" name="alarm" value="" /><br/>
+		视频文件：<input type="text" name="video" value="" /><br/>
+		<input type="submit" name="submit" value="submit" />
+				<br/>
+		</form>		
+	</body>
+</html>

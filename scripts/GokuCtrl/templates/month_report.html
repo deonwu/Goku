@@ -1,0 +1,24 @@
+{% extends "admin/base_site.html" %}
+
+
+{% block title %}Search{% endblock title %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="/media/css/changelists.css" /> 
+<style>
+#month_report{
+	width:90%;
+}
+
+#month_report td.row_no{
+	width:40px;
+}
+
+</style>
+<div style="margin-bottom:4px;">
+	<span style="font-size:24px;">每月告警数量报表...</span>&nbsp;&nbsp;
+	<a href="month_report.xls">保存Excel</a>
+</div>
+<div id='report_list'>
+{{table.as_table}}
+</div>
+{% endblock content %}

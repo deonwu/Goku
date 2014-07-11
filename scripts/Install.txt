@@ -1,0 +1,89 @@
+0. 安装Linux 2.6以上操作系统， 安装步骤略.
+1. 安装数据库
+  1.1 安装Mysql 5.1+ 以上由CentOs 5.5或 Unbuntu1.0集成
+  1.2 创建数据库
+      ＃mysqladmin create goku
+  1.3 初始化数据库
+      #mysql -A goku -u root <init_goku.sql     
+   
+2. 安装Java 1.6+
+  2.1 先复制安装程序到/opt目录。在命令行输入下列命令，根据提示回车结束后安装完毕。
+  	  #cd /opt
+  	  #./jdk-6u22-linux-i586.bin    
+  
+3. 配置中心服务器
+  3.1 配置中心服务器到/opt/BTSMonitor目录
+     #mkdir /opt/BTSMonitor
+     #cd /opt/BTSMonitor
+     
+  3.2 复制Goku-1.0.0.jar和GokuCtrl.war 到 /opt/BTSMonitor目录
+  3.3 创建master.conf配置文件, 配置视频保存路径
+     #vi master.conf
+	 file_root_path = /opt/video_data
+	      
+  3.4 创建启动脚本
+     #vi start_master.sh
+     #!/bin/bash
+	 JAVA_HOME=/opt/jdk1.6.0_22
+	 cd /opt/BTSMonitor
+	 nohup $JAVA_HOME/bin/java -jar Goku-1.0.0.jar --master >/dev/null &
+  
+  3.5 修改启动文件属性
+     #chmod a+x start_master.sh
+     
+  3.6 编辑/etc/rc.local 加入开机自动启动。
+     #vi /etc/rc.local
+          
+     /opt/BTSMonitor/start_master.sh &
+     ***注意需要加入到"exit 0"前面。
+     
+  3.7 重启服务器后测试中心服务器。
+     ＃reboot
+  3.8 服务器启动成功后，在另外机器的浏览器中输入，中心服务器地址:
+     http://192.168.1.100:8080
+  3.9 查询配置说明文档：
+     http://192.168.1.100:8080/?q=settings_doc
+
+4. 配置转发服务器
+  4.1 配置中心服务器到/opt/BTSMonitor目录
+     #mkdir /opt/BTSMonitor
+     #cd /opt/BTSMonitor
+     
+  4.2 复制Goku-1.0.0.jar和GokuCtrl.war 到 /opt/BTSMonitor目录
+  4.3 创建video.conf配置文件, 配置中心服务器地址
+     #vi video.conf
+     master_server_url=http://192.168.1.200:8080
+	 group_name=default
+	 file_root_path = /opt/video_data
+     
+     ***注意
+     	1. 当中心服务器和转发服务器在一台硬件服务器上时，不能使用http://127.0.0.1:8080
+     	来配置中心服务器地址。
+     	2. 视频路径和中心服务器要相同，不然无法回放视频录像。
+     
+  3.4 创建启动脚本
+     #vi start_video.sh
+     #!/bin/bash
+	 JAVA_HOME=/opt/jdk1.6.0_22	 
+	 cd /opt/BTSMonitor
+	 nohup $JAVA_HOME/bin/java -jar Goku-1.0.0.jar --video >/dev/null &
+  
+  3.5 修改启动文件属性
+     #chmod a+x start_video.sh
+     
+  3.6 编辑/etc/rc.local 加入开机自动启动。
+     #vi /etc/rc.local          
+     /opt/BTSMonitor/start_video.sh &
+     
+     ***注意需要加入到"exit 0"前面,如果视频转发和中心服务器在相同的服务器，需要在视频
+     启动前加入"sleep 5"等待中心服务器启动成功。
+     
+  3.7 重启服务器后测试中心服务器。
+     ＃reboot
+
+5. 故障检查：
+  1. 查看/opt/BTSMonitor/logs/video.conf 或 master.conf 是否有ERROR信息输出
+  2. 查看服务器是否运行正常
+     #ps -ef |grep java
+  3. 手动启动服务：
+     #java -jar Goku-1.0.0.jar --master 

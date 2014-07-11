@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="" >
+<head>
+<title>中国移动通信视频监控系统接口</title>
+
+<meta name="robots" content="NONE,NOARCHIVE" />
+</head>
+<body>
+<!-- Container -->
+<h1>中国移动基站视频图像监控系统接口--<a href="?q=version">v1.0</a></h1>
+<a href="?q=help_doc">系统调用接口文档</a><br/>
+<a href="?q=settings_doc">系统配置参数文档</a><br/>
+<a href="?q=help_tables">主要表结构说明</a><br/>
+<a href="GokuCtrl/admin">后台配置入口</a><br/>
+<a href="GokuCtrl/month_report">每月告警数量报表</a><br/>
+<a href="?q=st&name=BTSMonitor.zip">客户端安装包</a> (注意：下载后要手动重命名为BTSMonitor.zip才能解压使用)<br/>
+<a href="GokuCtrl/admin/coreapp/basestation/?connectionStatus__exact=timeout">连接错误设备</a><br/>
+<br/>
+---下列功能只用于开发调试---<br/>
+
+<a href="?q=mock_video">模拟调试功能</a><br/>
+<a href="?q=list_al&sid=test&en=utf8">告警列表</a><br/>
+<a href="?q=list_bs_tree&sid=test&en=utf8">基站列表</a><br/>
+<a href="?q=list_task&sid=test&en=utf8">监控计划列表</a><br/>
+</body>
+</html>

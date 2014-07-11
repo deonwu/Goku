@@ -1,0 +1,26 @@
+
+# RE:<uuid>$<videoPath>$<alarmCode>$<baseStation>$<channelId>$<alarmStatus>
+RE:10011$test01.h264$11$1001$1$1
+RE:10012$test03.h264$11$1001$1$3
+RE:10013$test04.h264$13$1001$1$2
+RE:100401$pic_2.jpg$13$1001$1$2$2$100401
+RE:100402$pic_3.jpg$13$1001$1$2$4$100401
+RE:100403$pic_2.jpg$13$1001$1$2$4$100401
+
+# BS:<uuid>$<devType>$<groupName>$<IP:port>$<channels>$<location>
+BS:1001$1$group1$192.168.1.156:9001$1:通道1,2:通道2$10010$诺西大楼$1003
+#BS:1001$1$group1$hzluming.3322.org:9001$1:通道1,2:通道2$10010$诺西大楼
+BS:1002$1$group1$192.168.1.67:9001$1:通道1,2:通道2$10020$国內出发
+BS:1004$2$image$192.168.1.67:12.34.1$1:通道1,2:通道2$10020$图片测试
+
+# LO:<uuid>$<name>$<parent>
+LO:100$浙江省$
+LO:1001$滨江区$100
+LO:1002$萧山区$100
+LO:10010$信诚路口$1001
+LO:10020$萧山机场$1002
+
+#TS:<taskID>$<name>$<uuid>$<channel>$<windowID>$<startDate>$<endDate>$<weeks>$<startTime>$<endTime>$<minShowTime>$<showOrder>$<status>
+TS:1$test1$1001$1$1$0$0$0$08:30$08:32$10$1$1
+TS:2$test2$1002$1$1$0$0$0$08:31$08:31$10$1$2
+TS:3$test3$1001$2$2$0$0$1,2,3,4$08:32$11:23$3$1$1
